@@ -14,29 +14,29 @@ def login_user(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
+        # NORMAL DJANGO LOGIN
         user = authenticate(request, username=username, password=password)
-        if user:
+        if user is not None:
             login(request, user)
             return redirect('dashboard')
-        else:
-            return render(request, 'students/login.html', {
-                'error': 'Invalid username or password'
-            })
+
+        messages.error(request, 'Invalid username or password')
 
     return render(request, 'students/login.html')
 
 
+# ---------------- LOGOUT ----------------
+@login_required
 def logout_user(request):
     logout(request)
     return redirect('login')
 
 
-# ---------------- DASHBOARD (CHART FIXED) ----------------
+# ---------------- DASHBOARD ----------------
 @login_required
 def dashboard(request):
     total_students = Student.objects.count()
 
-    # IMPORTANT: ignore empty / null course values
     course_data = (
         Student.objects
         .exclude(course__isnull=True)
