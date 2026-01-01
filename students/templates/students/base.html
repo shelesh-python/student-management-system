@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Student Management{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'students/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" href="{% url 'dashboard' %}">
+      Student Management
+    </a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'view_students' %}">View Students</a>
+        </li>
+
+        {% if user.is_superuser or user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_student' %}">Add Student</a>
+        </li>
+        {% endif %}
+
+      </ul>
+
+      {% if user.is_authenticated %}
+        <span class="text-white me-3">
+          Hi, {{ user.username }}
+        </span>
+        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
+          Logout
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+    {% include 'students/base_messages.html' %}
+    {% block content %}{% endblock %}
+</div>
+
+<!-- ✅ JS FILES: ALWAYS BEFORE </body> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'students/js/main.js' %}"></script>
+
+</body>
+</html>

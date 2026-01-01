@@ -1,0 +1,19 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<h3>Edit Student</h3>
+
+<form method="post">
+  {% csrf_token %}
+
+  <input name="name" value="{{ student.name }}" class="form-control mb-2">
+  <input name="roll" value="{{ student.roll_no }}" class="form-control mb-2">
+  <input name="email" value="{{ student.email }}" class="form-control mb-2">
+  <input name="course" value="{{ student.course }}" class="form-control mb-2">
+  <input name="phone" value="{{ student.phone }}" class="form-control mb-3">
+
+  <button class="btn btn-success">Update</button>
+</form>
+{% endblock %}

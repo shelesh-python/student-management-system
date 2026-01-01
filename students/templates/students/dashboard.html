@@ -1,0 +1,101 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Welcome {{ user.username }}</h4>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card shadow text-center p-3">
+      <h5>Total Students</h5>
+      <h2 class="text-primary">{{ total_students }}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow p-4">
+  <h5 class="mb-3">Students per Course</h5>
+   <div style="height:300px;">
+    <canvas id="courseChart"></canvas>
+  </div>
+</div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const labels = {{ labels|safe }};
+    const data = {{ data|safe }};
+
+    const ctx = document.getElementById('courseChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Students',
+          data: data,
+
+          /* 👇 SLIM + SMOOTH LOOK */
+          barThickness: 30,
+          borderRadius: 12,
+          backgroundColor: [
+            'rgba(102, 126, 234, 0.8)',
+            'rgba(118, 75, 162, 0.8)',
+            'rgba(86, 171, 47, 0.8)',
+            'rgba(255, 152, 0, 0.8)',
+            'rgba(3, 169, 244, 0.8)'
+          ],
+          hoverBackgroundColor: [
+            '#667eea',
+            '#764ba2',
+            '#56ab2f',
+            '#ff9800',
+            '#03a9f4'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1200,
+          easing: 'easeOutQuart'
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: '#eee'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: '#333',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 8
+          }
+        }
+      }
+    });
+
+  });
+</script>
+
+
+{% endblock %}

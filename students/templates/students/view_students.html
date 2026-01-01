@@ -1,0 +1,58 @@
+{% extends 'students/base.html' %}
+
+{% block title %}View Students{% endblock %}
+
+{% block content %}
+<h3>Students List</h3>
+
+<form method="get" class="mb-3">
+  <div class="input-group">
+    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search student">
+    <button class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<table class="table table-bordered table-striped">
+  <tr class="table-dark">
+    <th>Name</th>
+    <th>Roll</th>
+    <th>Email</th>
+    <th>Course</th>
+    <th>Action</th>
+  </tr>
+
+  {% for s in students %}
+  <tr>
+    <td>{{ s.name }}</td>
+    <td>{{ s.roll_no }}</td>
+    <td>{{ s.email }}</td>
+    <td>{{ s.course }}</td>
+    <td>
+
+      <!-- ADMIN + STAFF : EDIT -->
+      {% if user.is_superuser or user.is_staff %}
+        <a href="{% url 'edit_student' s.id %}" class="btn btn-warning btn-sm">
+          Edit
+        </a>
+      {% endif %}
+
+      <!-- ONLY ADMIN : DELETE -->
+      {% if user.is_superuser %}
+        <a href="{% url 'delete_student' s.id %}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure?')">
+           Delete
+        </a>
+      {% endif %}
+
+      <!-- VIEWER -->
+      {% if not user.is_superuser and not user.is_staff %}
+        <span class="text-muted">View Only</span>
+      {% endif %}
+
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
